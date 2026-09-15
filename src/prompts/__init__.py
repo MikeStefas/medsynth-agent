@@ -1,3 +1,9 @@
-from src.prompts.system_prompts import QUERY_GENERATOR_SYSTEM_PROMPT
+from src.prompts.system_prompts import (
+    QUERY_GENERATOR_SYSTEM_PROMPT,
+    COLLECTION_DECIDER_SYSTEM_PROMPT,
+)
 
-__all__ = ["QUERY_GENERATOR_SYSTEM_PROMPT"]
+__all__ = [
+    "QUERY_GENERATOR_SYSTEM_PROMPT",
+    "COLLECTION_DECIDER_SYSTEM_PROMPT",
+]

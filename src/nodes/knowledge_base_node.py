@@ -1,42 +1,26 @@
-import sys
-from langchain_core.messages import SystemMessage
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
 from src.types.state import State
-from src.llms.clients import local_llm
-from src.prompts import QUERY_GENERATOR_SYSTEM_PROMPT
 from src.tools.pubmed import search_pubmed_pmids, fetch_article_metadata, print_article_metadata
+from src.variables import PUBMED_RETMAX, EMBEDDING_MODEL_NAME
 
 
-def build_knowledge_base_node(state: State) -> dict:
-    # Step 1: Generate PubMed query string from user messages
-    try:
-        messages = [
-            SystemMessage(content=QUERY_GENERATOR_SYSTEM_PROMPT),
-        ] + state["messages"]
-        
-        response = local_llm.invoke(messages)
-        query = str(response.content).strip()
-    except Exception as err:
-        print(f"Error generating query: {err}")
-        sys.exit(1)
+def knowledge_base_node(state: State) -> dict:
+    """Builds knowledge base (vector db) from PubMed articles."""
+    query = state["generated_query"]
     
-    print("=" * 50)
-    print(f"Generated Query: {query}")
-    print("=" * 50)
+    collection_name = query.replace(" ", "_")
 
-    # Step 2: Fetch PubMed PMIDs & metadata, then embed into Chroma Vector DB
-    pmids = search_pubmed_pmids(query, retmax=500)
-    print(f"Fetched {len(pmids)} PMIDs. Embedding into Knowledge Base...\n")
+    pmids = search_pubmed_pmids(query, retmax=PUBMED_RETMAX)
 
     chroma_client = chromadb.PersistentClient()
     embedding_function = SentenceTransformerEmbeddingFunction(
-        model_name="NeuML/pubmedbert-base-embeddings", 
+        model_name=EMBEDDING_MODEL_NAME, 
         device="cpu"
     )
     collection = chroma_client.get_or_create_collection(
-        name=query.replace(" ", "_"), 
+        name=collection_name, 
         embedding_function=embedding_function
     )
     
@@ -55,4 +39,4 @@ def build_knowledge_base_node(state: State) -> dict:
         except Exception as e:
             print(f"[{idx}/{len(pmids)}] Error fetching PMID {article_id}: {e}\n")
     
-    return {"query": query}
+    return {"collection_to_be_used": collection_name}
