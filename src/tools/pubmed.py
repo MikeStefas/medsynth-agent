@@ -1,4 +1,4 @@
-import config  # ensures NCBI_API_KEY is set before metapub import
+import config 
 from metapub import PubMedFetcher
 
 fetcher = PubMedFetcher()

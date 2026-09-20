@@ -7,7 +7,7 @@ from src.prompts import QUERY_GENERATOR_SYSTEM_PROMPT
 
 def query_node(state: State) -> dict:
     """Generates a PubMed search query from user prompt messages."""
-
+    print(state['features'])
     print("Node 1. Creating query...")
     try:
         messages = [
