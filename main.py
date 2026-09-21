@@ -4,7 +4,7 @@ from src.graph import graph
 if __name__ == "__main__":
     initial_state = {
         "messages": [
-            HumanMessage(content="Can you search for recent research on metformin and cardiovascular outcomes in type 2 diabetes?")
+            HumanMessage(content="High-risk diabetic patients with severe hyperglycemia, insulin resistance, and obesity.")
         ],
         "dataset_path": "data/raw/pima_diabetes_dataset.csv"
     }

@@ -4,6 +4,7 @@ from src.types import State, Feature, ContinuousFeature, CategoricalFeature
 
 
 def dataset_analyzer_node(state: State) -> dict:
+    print("[Node: Dataset Analyzer] Analyzing dataset schema and extracting features...")
     df = pd.read_csv(state["dataset_path"])
     features: List[Feature] = []
 

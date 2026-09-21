@@ -1,26 +1,30 @@
 import sys
 from langchain_core.messages import SystemMessage
-from src.types.state import State
+from src.types import State, QueryOutput
 from src.llms.clients import local_llm
 from src.prompts import QUERY_GENERATOR_SYSTEM_PROMPT
 
 
 def query_node(state: State) -> dict:
-    """Generates a PubMed search query from user prompt messages."""
-    print(state['features'])
-    print("Node 1. Creating query...")
+    """Generates a PubMed search query and target clinical scenario from user prompt messages."""
+    print("[Node: Query Generator] Extracting PubMed query and target clinical scenario from user request...")
     try:
         messages = [
             SystemMessage(content=QUERY_GENERATOR_SYSTEM_PROMPT),
         ] + state["messages"]
         
-        response = local_llm.invoke(messages)
-        generated_query = str(response.content).strip()
+        structured_llm = local_llm.with_structured_output(QueryOutput)
+        result: QueryOutput = structured_llm.invoke(messages)
+        
+        generated_query = result.query.strip()
+        target_scenario = result.target_scenario.strip()
     except Exception as err:
         print(f"Error generating query: {err}")
         sys.exit(1)
-    
-    print(f"Generated Query: {generated_query}")
 
-    return {"generated_query": generated_query}
+    return {
+        "generated_query": generated_query,
+        "target_scenario": target_scenario,
+    }
+
 

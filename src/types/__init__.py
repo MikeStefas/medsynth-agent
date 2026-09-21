@@ -9,6 +9,7 @@ from src.types.features import (
 from src.types.clinical_rules import ClinicalRule
 from src.types.dataset_metadata import DatasetMetadata
 from src.types.quality_gate_report import QualityGateReport
+from src.types.structured_outputs import QueryOutput
 
 __all__ = [
     "State",
@@ -21,4 +22,5 @@ __all__ = [
     "ClinicalRule",
     "DatasetMetadata",
     "QualityGateReport",
+    "QueryOutput",
 ]

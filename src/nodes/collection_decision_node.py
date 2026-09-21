@@ -8,6 +8,7 @@ from src.prompts import COLLECTION_DECIDER_SYSTEM_PROMPT
 
 def collection_decision_node(state: State) -> dict:
     """Checks if existing knowledge bases (collections) are sufficient for the user's request."""
+    print("[Node: Collection Decision] Checking if an existing vector database collection covers the query...")
     generated_query = state["generated_query"]
 
     chroma_client = chromadb.PersistentClient()
@@ -31,13 +32,10 @@ def collection_decision_node(state: State) -> dict:
         result = str(checker_response.content).strip().strip("'\"`")
 
         if result in existing_collections:
-            print(f"Found matching existing collection: '{result}'")
             return {
                 "prior_collection_exists": True,
                 "collection_to_be_used": result,
             }
-
-        print("No suitable existing collection found.")
     except Exception as e:
         print(f"Error evaluating collection match: {e}")
 

@@ -8,6 +8,7 @@ from src.types.features import Feature
 class State(TypedDict, total=False):
     messages: Annotated[list[AnyMessage], add_messages]
     generated_query: str
+    target_scenario: str
     prior_collection_exists: bool
     collection_to_be_used: str
     dataset_path: str
