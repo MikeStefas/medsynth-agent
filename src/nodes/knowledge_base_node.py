@@ -2,15 +2,19 @@ import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
 from src.types.state import State
-from src.tools.pubmed import search_pubmed_pmids, fetch_article_metadata, print_article_metadata
+from src.utils.pubmed import search_pubmed_pmids, fetch_article_metadata, print_article_metadata
 from src.variables import PUBMED_RETMAX, EMBEDDING_MODEL_NAME
+
+
 
 
 def knowledge_base_node(state: State) -> dict:
     """Builds knowledge base (vector db) from PubMed articles."""
+    print("⫘" * 60)
+    print("⫘" * 60)
+    print("4)fetching abstracts and creating vector database")
     query = state["generated_query"]
-    collection_name = query.replace(" ", "_")
-    print(f"[Node: Knowledge Base] Fetching articles from PubMed and building collection '{collection_name}'...")
+    collection_name = "jorjor" #THIS IS TO BE CHANGED!
 
     pmids = search_pubmed_pmids(query, retmax=PUBMED_RETMAX)
 
@@ -36,3 +40,5 @@ def knowledge_base_node(state: State) -> dict:
             pass
     
     return {"collection_to_be_used": collection_name}
+
+

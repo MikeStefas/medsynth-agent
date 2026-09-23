@@ -6,9 +6,13 @@ from src.llms.clients import local_llm
 from src.prompts import COLLECTION_DECIDER_SYSTEM_PROMPT
 
 
+
+
 def collection_decision_node(state: State) -> dict:
     """Checks if existing knowledge bases (collections) are sufficient for the user's request."""
-    print("[Node: Collection Decision] Checking if an existing vector database collection covers the query...")
+    print("⫘" * 60)
+    print("⫘" * 60)
+    print("3) checking for pre existing vector databases")
     generated_query = state["generated_query"]
 
     chroma_client = chromadb.PersistentClient()

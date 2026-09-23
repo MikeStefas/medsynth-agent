@@ -30,5 +30,13 @@ def print_article_metadata(metadata: dict) -> None:
     print(f"Keywords: {metadata['keywords']}")
     print(f"Abstract: {metadata['abstract']}")
 
+GUIDELINE_FILTER = 'AND ("Practice Guideline"[Publication Type] OR "Consensus Development Conference"[Publication Type] OR "guideline"[Title] OR "consensus"[Title])'
+
 def search_pubmed_pmids(query: str, retmax: int = 10) -> list[str]:
-    return fetcher.pmids_for_query(query, retmax=retmax)
+    filter_suffix = 'AND ("Practice Guideline"[Publication Type] OR "Consensus Development Conference"[Publication Type] OR "guideline"[Title] OR "consensus"[Title])'
+    full_query = query.strip()
+    if filter_suffix not in full_query:
+        full_query = f"{full_query} {filter_suffix}"
+    print(f"final pubmed query: {full_query}")
+    return fetcher.pmids_for_query(full_query, retmax=retmax)
+

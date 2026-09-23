@@ -5,9 +5,13 @@ from src.llms.clients import local_llm
 from src.prompts import QUERY_GENERATOR_SYSTEM_PROMPT
 
 
+
+
 def query_node(state: State) -> dict:
-    """Generates a PubMed search query and target clinical scenario from user prompt messages."""
-    print("[Node: Query Generator] Extracting PubMed query and target clinical scenario from user request...")
+    """Generates a PubMed search query and target class from user prompt messages."""
+    print("⫘" * 60)
+    print("⫘" * 60)
+    print("2) generating query")
     try:
         messages = [
             SystemMessage(content=QUERY_GENERATOR_SYSTEM_PROMPT),
@@ -17,14 +21,17 @@ def query_node(state: State) -> dict:
         result: QueryOutput = structured_llm.invoke(messages)
         
         generated_query = result.query.strip()
-        target_scenario = result.target_scenario.strip()
+        target_class = result.target_class.strip()
+        print(f"Generated_query: {generated_query}")
+        print(f"Target_class: {target_class}")
     except Exception as err:
         print(f"Error generating query: {err}")
         sys.exit(1)
 
     return {
         "generated_query": generated_query,
-        "target_scenario": target_scenario,
+        "target_class": target_class,
     }
+
 
 

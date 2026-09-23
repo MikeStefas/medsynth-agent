@@ -1,10 +1,16 @@
 import pandas as pd
 from typing import List, Dict, Any
+from rich import print as rprint
 from src.types import State, Feature, ContinuousFeature, CategoricalFeature
+from src.utils import is_categorical
+
 
 
 def dataset_analyzer_node(state: State) -> dict:
-    print("[Node: Dataset Analyzer] Analyzing dataset schema and extracting features...")
+    """Analyzes the dataset schema and extracts feature information."""
+    print("⫘" * 60)
+    print("⫘" * 60)
+    print("1) analyzing dataset")
     df = pd.read_csv(state["dataset_path"])
     features: List[Feature] = []
 
@@ -34,18 +40,9 @@ def dataset_analyzer_node(state: State) -> dict:
                 )
             )
 
+    rprint(features)
     return {"features": features}
 
 
-def is_categorical(series: pd.Series) -> bool:
-    col = series.dropna()
 
-    if not pd.api.types.is_numeric_dtype(col) or pd.api.types.is_bool_dtype(col):
-        return True
-
-    unique_count = col.nunique()
-    if unique_count <= 10:  # e.g. binary indicators or small ordinal scales
-        return True
-
-    return False
 
